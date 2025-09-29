@@ -53,7 +53,7 @@ export default function RequestAccessPage() {
                 className="inline-flex items-center text-gold-medium hover:text-gold-light transition-all duration-500 mb-12 font-body text-sm uppercase tracking-widest group"
               >
                 <ArrowLeft className="mr-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                Return to Vault
+                Return to Revura
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-gold-light transition-all duration-300 group-hover:w-full"></span>
               </Link>
             </div>
@@ -74,7 +74,7 @@ export default function RequestAccessPage() {
             </div>
             
             <h1 className="font-display text-5xl md:text-6xl text-gold-medium mb-8 animate-gold-shimmer">
-              Welcome to THE VAULT
+              Welcome to REVURA
             </h1>
             
             <div className="divider-gold max-w-xl mx-auto mb-12"></div>
@@ -160,7 +160,7 @@ export default function RequestAccessPage() {
                 className="inline-flex items-center text-gold-medium hover:text-gold-light transition-all duration-500 mb-12 font-body text-sm uppercase tracking-widest group"
               >
                 <ArrowLeft className="mr-3 h-5 w-5 group-hover:-translate-x-1 transition-transform" />
-                Return to Vault
+                Return to Revura
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-gold-light transition-all duration-300 group-hover:w-full"></span>
               </Link>
               

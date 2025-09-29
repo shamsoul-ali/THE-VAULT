@@ -1,10 +1,10 @@
-# THE VAULT - Private Auto Auctions
+# REVURA - Private Auto Auctions
 
 An exclusive, invitation-only auction platform for rare and limited supercars, built with Next.js 14 and a luxury aesthetic inspired by high-end watch catalogs.
 
 ## 🎯 Project Overview
 
-THE VAULT is a private auction platform designed for high-net-worth individuals and serious collectors. The platform operates on an invitation-only basis, with public access limited to teaser content and application forms.
+REVURA is a private auction platform designed for high-net-worth individuals and serious collectors. The platform operates on an invitation-only basis, with public access limited to teaser content and application forms.
 
 ### Key Features (Planned)
 - **Private Access Control**: KYC-verified, invitation-only membership
@@ -79,7 +79,7 @@ src/
    - Authentication system (Auth0/Clerk)
 
 2. **Private Routes**
-   - `/vault` - Private catalog grid
+   - `/marketplace` - Public catalog grid
    - `/lot/{slug}` - Individual lot pages
    - Authentication guards and middleware
 
@@ -110,7 +110,7 @@ src/
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd the-vault
+cd revura
 
 # Install dependencies
 npm install
@@ -191,4 +191,4 @@ Private project - All rights reserved.
 
 ---
 
-**THE VAULT** - Where exceptional automobiles meet exceptional collectors.
+**REVURA** - Where exceptional automobiles meet exceptional collectors.

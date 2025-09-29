@@ -70,20 +70,33 @@ export default function HomePage() {
         ></div> */}
         
         {/* Cinematic Video Background */}
-        <video 
-          className="hero-video-background" 
-          autoPlay 
-          muted 
-          loop 
+        <video
+          className="hero-video-background"
+          autoPlay
+          muted
+          loop
           playsInline
           preload="auto"
           controls={false}
           disablePictureInPicture
           style={{ zIndex: -2 }}
           onLoadStart={() => console.log('Video element loadstart')}
-          onCanPlay={() => console.log('Video element canplay')}
+          onCanPlay={(e) => {
+            console.log('Video element canplay');
+            const video = e.currentTarget;
+            video.play().catch(err => console.log('Canplay autoplay attempt failed:', err));
+          }}
           onError={(e) => console.error('Video element error:', e)}
-          onLoadedData={() => console.log('Video data loaded')}
+          onLoadedData={(e) => {
+            console.log('Video data loaded');
+            const video = e.currentTarget;
+            video.play().catch(err => console.log('LoadedData autoplay attempt failed:', err));
+          }}
+          onLoadedMetadata={(e) => {
+            console.log('Video metadata loaded');
+            const video = e.currentTarget;
+            video.play().catch(err => console.log('LoadedMetadata autoplay attempt failed:', err));
+          }}
         >
           <source src="/html/The new Porsche 911 Exterior  Interior Design.mp4" type="video/mp4" />
           Your browser does not support the video tag.
@@ -99,20 +112,16 @@ export default function HomePage() {
             {/* Hero Title - Left Aligned */}
             <div className="space-y-6">
               <h1 className="text-hero">
-                The Ultimate<br/>
-                Luxury Car
+                Where Performance<br/>
+                Meets Presents
               </h1>
             </div>
             
             {/* Subtitle - Left Aligned */}
             <div className="space-y-6">
-              <h2 className="text-subtitle">
-                WHERE LEGENDS MEET LEGACY
+              <h2 className="text-muted text-sm tracking-widest">
+                LEGENDS MEET LEGACY
               </h2>
-              <p className="text-muted text-lg leading-relaxed max-w-xl font-light">
-                Exclusive invitation-only auctions featuring the world's most coveted supercars, 
-                hypercars, and automotive masterpieces.
-              </p>
             </div>
             
           </div>
@@ -255,74 +264,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Premium CTA Section - James Bond Style */}
-      <section className="py-32 px-4 bg-gradient-to-br from-black-rich via-black-pure to-black-rich relative overflow-hidden">
-        {/* Cinematic Background Effects */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-gold-medium/5 via-transparent to-gold-medium/5" />
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gold-medium/10 rounded-full blur-3xl animate-luxury-pulse" />
-        </div>
-        
-        <div className="max-w-5xl mx-auto text-center relative">
-          <div className="animate-exclusive-entrance">
-            {/* Premium Badge */}
-            <div className="inline-flex items-center mb-8">
-              <div className="badge-exclusive text-lg px-6 py-3">
-                <Lock className="w-5 h-5 mr-2" />
-                MEMBERSHIP REQUIRED
-                <Crown className="w-5 h-5 ml-2" />
-              </div>
-            </div>
-            
-            {/* Dramatic Headline */}
-            <h2 className="font-display text-5xl md:text-7xl text-gold-medium mb-8 animate-gold-shimmer">
-              ACCESS RESTRICTED
-            </h2>
-            
-            <div className="divider-gold max-w-xl mx-auto mb-12"></div>
-            
-            {/* Sophisticated Copy */}
-            <div className="mb-16 space-y-6">
-              <p className="text-subtitle text-center max-w-3xl mx-auto leading-relaxed">
-                THE WORLD'S MOST EXCLUSIVE AUTOMOTIVE SOCIETY
-              </p>
-              <p className="text-premium text-xl max-w-2xl mx-auto opacity-90 leading-relaxed">
-                Join an elite circle of collectors, enthusiasts, and connoisseurs. 
-                Access our private catalog of automotive legends and secure your legacy.
-              </p>
-            </div>
-            
-            {/* Premium Actions */}
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-              <a href="/request-access">
-                <Button className="btn-luxury group text-lg px-8 py-4 animate-premium-glow">
-                  <Crown className="mr-3 h-6 w-6 group-hover:rotate-12 transition-transform" />
-                  Begin Membership Application
-                  <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </a>
-              <a href="/schedule-viewing">
-                <Button className="btn-luxury-outline group text-lg px-8 py-4">
-                  <Eye className="mr-3 h-6 w-6 group-hover:scale-110 transition-transform" />
-                  Schedule Private Tour
-                </Button>
-              </a>
-            </div>
-            
-            {/* Exclusivity Notice */}
-            <div className="text-caption text-gold-medium/70 max-w-lg mx-auto leading-relaxed">
-              By application only. Membership subject to approval by our selection committee. 
-              All transactions are conducted with the utmost discretion and privacy.
-            </div>
-          </div>
-        </div>
-        
-        {/* Luxury Corner Accents */}
-        <div className="absolute top-8 left-8 w-16 h-16 border-l-2 border-t-2 border-gold-medium/30"></div>
-        <div className="absolute top-8 right-8 w-16 h-16 border-r-2 border-t-2 border-gold-medium/30"></div>
-        <div className="absolute bottom-8 left-8 w-16 h-16 border-l-2 border-b-2 border-gold-medium/30"></div>
-        <div className="absolute bottom-8 right-8 w-16 h-16 border-r-2 border-b-2 border-gold-medium/30"></div>
-      </section>
 
     </div>
   );

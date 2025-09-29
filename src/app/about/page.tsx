@@ -17,15 +17,15 @@ export default function AboutPage() {
               Back to Home
             </Link>
             <h1 className="font-display text-5xl md:text-6xl mb-6">
-              About THE VAULT
+              About REVURA
             </h1>
           </div>
           
           <div className="space-y-8 text-left max-w-3xl mx-auto">
             <p className="text-subtitle leading-relaxed">
-              THE VAULT represents the pinnacle of automotive curation, where every vehicle 
-              is selected for its exceptional provenance, mechanical integrity, and historical 
-              significance. Our team of specialists conducts exhaustive research, ensuring 
+              REVURA represents the pinnacle of automotive curation, where every vehicle
+              is selected for its exceptional provenance, mechanical integrity, and historical
+              significance. Our team of specialists conducts exhaustive research, ensuring
               each lot meets museum-grade standards before entering our private catalog.
             </p>
             
