@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Search, Filter, Eye, Calendar, MapPin, Fuel, Gauge, Crown, Diamond, Star, Play, Heart, ArrowRight, X, Zap, Award, TrendingUp } from "lucide-react";
-import { supabase } from '@/lib/supabase/client'
-import { Car, CarImage } from '@/lib/supabase/types'
+import { createBrowserClient } from '@supabase/ssr'
+import { Car, CarImage, Database } from '@/lib/supabase/types'
 
 // Type for enhanced car data with images
 interface CarWithImages extends Car {
@@ -24,16 +24,36 @@ export default function MarketplacePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Create Supabase client
+  const supabase = createBrowserClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+
   // Add debug log to see if component mounts
   useEffect(() => {
     console.log('MarketplacePage mounted');
+    console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+    console.log('Has Anon Key:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+    console.log('Supabase client created:', !!supabase);
     return () => console.log('MarketplacePage unmounted');
   }, []);
 
   // Fetch cars from Supabase
   useEffect(() => {
     console.log('useEffect for fetchCars running...');
+    const timer = setTimeout(() => {
+      console.log('Fetch timeout - checking if fetchCars was called');
+      if (loading) {
+        console.error('Still loading after 5 seconds - possible issue');
+        setError('Loading timeout - check connection');
+        setLoading(false);
+      }
+    }, 5000);
+
     fetchCars();
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Filter cars based on active filter and search query
@@ -61,52 +81,52 @@ export default function MarketplacePage() {
       setLoading(true);
       setError(null);
 
-      console.log('Starting to fetch cars...');
+      console.log('Fetching cars via API route...');
 
-      // First, let's try a simple query without joins
-      const { data: carsData, error: carsError } = await supabase
-        .from('cars')
-        .select('*')
-        .order('created_at', { ascending: false });
+      // Use the API route that we know works
+      const response = await fetch('/api/test-db');
+      const result = await response.json();
 
-      console.log('Cars query result:', { carsData, carsError });
+      console.log('API response:', result);
 
-      if (carsError) {
-        console.error('Cars query error:', carsError);
-        throw carsError;
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to fetch cars');
       }
 
+      const carsData = result.data || [];
+
       // Check if we have any cars
-      if (!carsData || carsData.length === 0) {
+      if (carsData.length === 0) {
         console.log('No cars found in database');
         setAllCars([]);
         setLoading(false);
         return;
       }
 
-      // If we have cars, try to fetch images separately
+      // Transform the cars data
       const transformedCars: CarWithImages[] = [];
 
       for (const car of carsData) {
         console.log('Processing car:', car.id, car.name);
 
-        // Fetch images for this car
-        const { data: imagesData, error: imagesError } = await supabase
-          .from('car_images')
-          .select('*')
-          .eq('car_id', car.id)
-          .order('sort_order', { ascending: true });
-
-        if (imagesError) {
-          console.warn('Error fetching images for car', car.id, ':', imagesError);
+        // For now, we'll fetch images separately using the API
+        let images: any[] = [];
+        try {
+          const imgResponse = await fetch(`/api/car-images/${car.id}`);
+          if (imgResponse.ok) {
+            const imgData = await imgResponse.json();
+            images = imgData.data || [];
+          }
+        } catch (err) {
+          console.warn('Could not fetch images for car', car.id);
         }
 
-        const images = imagesData || [];
         const primaryImage = images.find((img: any) => img.image_type === 'primary');
         const gallery = images.map((img: any) => img.image_url);
 
         transformedCars.push({
           ...car,
+          price: typeof car.price === 'string' ? parseFloat(car.price) : car.price,
           images,
           features: [],
           primaryImage: primaryImage?.image_url || gallery[0] || '',
