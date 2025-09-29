@@ -3,7 +3,7 @@
   publish = ".next"
 
 [build.environment]
-  NODE_VERSION = "20.17.0"
+  NODE_VERSION = "20"
   NEXT_TELEMETRY_DISABLED = "1"
   # Disable turbopack on Netlify to avoid css/postcss crash
   NEXT_DISABLE_TURBOPACK = "1"
