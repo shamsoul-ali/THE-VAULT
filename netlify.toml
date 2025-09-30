@@ -9,6 +9,10 @@
   NEXT_DISABLE_TURBOPACK = "1"
   # Work around native binding issues by disabling Lightning CSS native
   NEXT_DISABLE_LIGHTNINGCSS = "1"
+  # Force Tailwind to use JIT mode instead of native engine
+  TAILWIND_MODE = "JIT"
+  # Disable Tailwind CSS native engine to avoid binding issues
+  TAILWIND_DISABLE_NATIVE = "true"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
