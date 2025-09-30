@@ -16,7 +16,8 @@ import {
   Info,
   Settings,
   FileText,
-  Eye
+  Eye,
+  Play
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 import { useAuth } from '@/lib/hooks/useAuth'
@@ -228,8 +229,9 @@ export default function EditCarPage() {
         throw new Error('Please fill in all required fields (Name, Make, Model, Price)')
       }
 
+      const { features, ...carFormData } = formData
       const carData = {
-        ...formData,
+        ...carFormData,
         tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
         slug: generateSlug(formData.name),
         updated_by: user?.id
@@ -241,6 +243,16 @@ export default function EditCarPage() {
         .eq('id', carId)
 
       if (error) throw error
+
+      // Save features separately
+      if (features) {
+        const featuresArray = features.split('\n').filter(f => f.trim())
+        await fetch(`/api/cars/${carId}/features`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ features: featuresArray })
+        })
+      }
 
       setSuccess('Car updated successfully!')
 
@@ -676,6 +688,26 @@ export default function EditCarPage() {
           </div>
         </div>
 
+        {/* Car Features */}
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+          <h3 className="text-xl font-semibold text-white mb-4">Car Features</h3>
+          <div>
+            <Label htmlFor="features" className="text-white font-medium">
+              Features (one per line)
+            </Label>
+            <textarea
+              id="features"
+              value={formData.features || ''}
+              onChange={(e) => handleInputChange('features', e.target.value)}
+              placeholder="Enter car features, one per line:&#10;Premium Sound System&#10;Leather Seats&#10;Navigation System"
+              className="w-full h-32 mt-2 p-3 bg-white/10 border border-white/20 rounded text-white resize-none"
+            />
+            <p className="text-white/60 text-sm mt-2">
+              Enter each feature on a new line. These will be displayed in the car details.
+            </p>
+          </div>
+        </div>
+
         {/* Submit Buttons */}
         <div className="flex gap-4 pt-6">
           <Button
@@ -706,6 +738,12 @@ export default function EditCarPage() {
             <Button variant="outline">
               <Eye className="w-4 h-4 mr-2" />
               Manage Images
+            </Button>
+          </Link>
+          <Link href={`/admin/cars/${carId}/virtual-tour`}>
+            <Button variant="outline">
+              <Play className="w-4 h-4 mr-2" />
+              Virtual Tour
             </Button>
           </Link>
 
