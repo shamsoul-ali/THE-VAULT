@@ -119,7 +119,7 @@ export default function HomePage() {
             
             {/* Subtitle - Left Aligned */}
             <div className="space-y-6">
-              <h2 className="text-muted text-2xl tracking-widest">
+              <h2 className="text-muted text-4xl tracking-widest">
                 LEGENDS MEET LEGACY
               </h2>
             </div>

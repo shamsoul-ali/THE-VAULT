@@ -182,16 +182,16 @@
 
 @utility text-hero {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 5rem;
+  font-size: 6rem;
   font-weight: 300;
   line-height: 1.1;
   letter-spacing: 0.02em;
   color: var(--white);
   @media (min-width: 768px) {
-    font-size: 8rem;
+    font-size: 12rem;
   }
   @media (min-width: 1024px) {
-    font-size: 10rem;
+    font-size: 16rem;
   }
 }
 
