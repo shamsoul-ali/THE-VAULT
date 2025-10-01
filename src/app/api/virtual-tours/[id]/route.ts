@@ -3,9 +3,10 @@ import { createClient } from '@supabase/supabase-js'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
@@ -14,7 +15,7 @@ export async function GET(
     const { data, error } = await supabase
       .from('virtual_tours')
       .select('*')
-      .eq('car_id', params.id)
+      .eq('car_id', id)
       .eq('is_active', true)
       .single()
 
@@ -40,9 +41,10 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const { video_url, tour_title, tour_description } = await request.json()
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -54,7 +56,7 @@ export async function POST(
     const { data: existingTour } = await supabase
       .from('virtual_tours')
       .select('id')
-      .eq('car_id', params.id)
+      .eq('car_id', id)
       .single()
 
     let result
@@ -69,7 +71,7 @@ export async function POST(
           tour_description,
           is_active: true
         })
-        .eq('car_id', params.id)
+        .eq('car_id', id)
         .select()
         .single()
     } else {
@@ -77,7 +79,7 @@ export async function POST(
       result = await supabase
         .from('virtual_tours')
         .insert({
-          car_id: params.id,
+          car_id: id,
           video_url,
           tour_title,
           tour_description,
@@ -104,9 +106,10 @@ export async function POST(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const { tour_title, tour_description } = await request.json()
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -120,7 +123,7 @@ export async function PUT(
         tour_title,
         tour_description
       })
-      .eq('car_id', params.id)
+      .eq('car_id', id)
       .select()
       .single()
 
@@ -141,9 +144,10 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
@@ -153,14 +157,14 @@ export async function DELETE(
     const { data: tour } = await supabase
       .from('virtual_tours')
       .select('video_url')
-      .eq('car_id', params.id)
+      .eq('car_id', id)
       .single()
 
     // Delete the database record
     const { error } = await supabase
       .from('virtual_tours')
       .delete()
-      .eq('car_id', params.id)
+      .eq('car_id', id)
 
     if (error) throw error
 

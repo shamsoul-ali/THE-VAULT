@@ -3,9 +3,10 @@ import { createClient } from '@supabase/supabase-js'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
@@ -15,7 +16,7 @@ export async function GET(
     const { data, error } = await supabase
       .from('car_images')
       .select('*')
-      .eq('car_id', params.id)
+      .eq('car_id', id)
       .eq('gallery_selected', true)
       .order('sort_order', { ascending: true })
       .limit(10)
