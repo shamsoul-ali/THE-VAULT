@@ -758,7 +758,7 @@ export default function EditCarPage() {
           <Link href={`/admin/cars/${carId}/virtual-tour`}>
             <Button variant="outline">
               <Play className="w-4 h-4 mr-2" />
-              Virtual Tour
+              Gallery
             </Button>
           </Link>
 
