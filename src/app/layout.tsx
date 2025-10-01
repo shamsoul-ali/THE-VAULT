@@ -17,8 +17,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Revura | Private Auto Auctions",
-  description: "Exclusive invitation-only auctions for rare and limited supercars. By invitation only.",
+  title: "REVURA",
+  description: "Where Performance Meets Presence",
   keywords: ["luxury cars", "supercars", "auctions", "private", "exclusive", "Malaysia"],
 };
 
@@ -28,9 +28,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-x-hidden">
       <body
-        className={`${playfairDisplay.variable} ${inter.variable} antialiased bg-background text-foreground`}
+        className={`${playfairDisplay.variable} ${inter.variable} antialiased bg-background text-foreground overflow-x-hidden`}
       >
         <AuthProvider>
           <Navigation />

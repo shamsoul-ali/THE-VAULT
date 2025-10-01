@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Search, Filter, Eye, Calendar, MapPin, Fuel, Gauge, Crown, Diamond, Star, Play, Heart, ArrowRight, ArrowLeft, X, Zap, Award, TrendingUp, ChevronDown } from "lucide-react";
 import { createBrowserClient } from '@supabase/ssr'
 import { Car, CarImage, Database } from '@/lib/supabase/types'
+import { useScrollAnimation } from '@/lib/hooks/useScrollAnimation';
 
 // Type for enhanced car data with images
 interface CarWithImages extends Car {
@@ -15,6 +16,8 @@ interface CarWithImages extends Car {
 }
 
 export default function MarketplacePage() {
+  const heroSection = useScrollAnimation();
+  const filterSection = useScrollAnimation();
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCar, setSelectedCar] = useState<CarWithImages | null>(null);
@@ -240,51 +243,56 @@ export default function MarketplacePage() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
-          <div className="animate-luxury-fade-in-up">
+          <div
+            ref={heroSection.ref}
+            className={`transition-all duration-1000 ${
+              heroSection.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            }`}
+          >
             {/* Premium Badge */}
-            <div className="inline-flex items-center gap-3 mb-8 px-8 py-3 bg-gradient-to-r from-gold-medium/20 via-gold-light/20 to-gold-medium/20 backdrop-blur-xl border border-gold-medium/30 rounded-full animate-premium-glow">
-              <Diamond className="w-5 h-5 text-gold-medium animate-pulse" />
-              <span className="text-gold-light font-body text-sm uppercase tracking-[0.3em]">Curated Collection</span>
-              <Diamond className="w-5 h-5 text-gold-medium animate-pulse" />
+            <div className="inline-flex items-center gap-2 md:gap-3 mb-6 md:mb-8 px-4 py-2 md:px-8 md:py-3 bg-gradient-to-r from-gold-medium/20 via-gold-light/20 to-gold-medium/20 backdrop-blur-xl border border-gold-medium/30 rounded-full animate-premium-glow">
+              <Diamond className="w-4 h-4 md:w-5 md:h-5 text-gold-medium animate-pulse" />
+              <span className="text-gold-light font-body text-xs md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em]">Curated Collection</span>
+              <Diamond className="w-4 h-4 md:w-5 md:h-5 text-gold-medium animate-pulse" />
             </div>
 
             {/* Main Heading */}
-            <h1 className="font-display text-6xl md:text-8xl lg:text-9xl text-transparent bg-clip-text bg-gradient-to-r from-gold-light via-gold-medium to-gold-light mb-8 animate-gold-shimmer leading-none">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl text-transparent bg-clip-text bg-gradient-to-r from-gold-light via-gold-medium to-gold-light mb-6 md:mb-8 animate-gold-shimmer leading-none px-2">
               MARKETPLACE
             </h1>
 
             {/* Decorative Divider */}
-            <div className="flex items-center justify-center gap-4 mb-8">
-              <div className="w-24 h-px bg-gradient-to-r from-transparent to-gold-medium"></div>
-              <div className="w-24 h-px bg-gradient-to-l from-transparent to-gold-medium"></div>
+            <div className="flex items-center justify-center gap-3 md:gap-4 mb-6 md:mb-8">
+              <div className="w-16 md:w-24 h-px bg-gradient-to-r from-transparent to-gold-medium"></div>
+              <div className="w-16 md:w-24 h-px bg-gradient-to-l from-transparent to-gold-medium"></div>
             </div>
 
             {/* Subtitle */}
-            <p className="text-2xl md:text-3xl text-gold-light font-display mb-6 tracking-wider">
+            <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gold-light font-display mb-4 md:mb-6 tracking-wider px-4">
               Exceptional Vehicles for Discerning Collectors
             </p>
 
             {/* Description */}
-            <p className="text-white-soft text-lg max-w-3xl mx-auto mb-12 leading-relaxed font-light">
+            <p className="text-white-soft text-sm md:text-base lg:text-lg max-w-3xl mx-auto mb-8 md:mb-12 leading-relaxed font-light px-4">
               Discover the world's most exclusive supercars, hypercars, and vintage classics.
               Each vehicle undergoes rigorous authentication and provenance verification.
             </p>
 
             {/* Stats Row */}
-            <div className="flex flex-wrap justify-center gap-12 mb-12">
+            <div className="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12 mb-8 md:mb-12">
               <div className="text-center">
-                <div className="text-4xl font-display text-gold-medium mb-2">{allCars.filter(car => car.status === 'available').length}</div>
-                <div className="text-caption text-white-soft uppercase tracking-wider">Available</div>
+                <div className="text-2xl md:text-3xl lg:text-4xl font-display text-gold-medium mb-2">{allCars.filter(car => car.status === 'available').length}</div>
+                <div className="text-caption text-white-soft uppercase tracking-wider text-xs md:text-sm">Available</div>
               </div>
-              <div className="w-px h-12 bg-gold-medium/30"></div>
+              <div className="w-px h-8 md:h-12 bg-gold-medium/30"></div>
               <div className="text-center">
-                <div className="text-4xl font-display text-gold-medium mb-2">{allCars.length}</div>
-                <div className="text-caption text-white-soft uppercase tracking-wider">Total Cars</div>
+                <div className="text-2xl md:text-3xl lg:text-4xl font-display text-gold-medium mb-2">{allCars.length}</div>
+                <div className="text-caption text-white-soft uppercase tracking-wider text-xs md:text-sm">Total Cars</div>
               </div>
-              <div className="w-px h-12 bg-gold-medium/30"></div>
+              <div className="w-px h-8 md:h-12 bg-gold-medium/30"></div>
               <div className="text-center">
-                <div className="text-4xl font-display text-gold-medium mb-2">24/7</div>
-                <div className="text-caption text-white-soft uppercase tracking-wider">Concierge</div>
+                <div className="text-2xl md:text-3xl lg:text-4xl font-display text-gold-medium mb-2">24/7</div>
+                <div className="text-caption text-white-soft uppercase tracking-wider text-xs md:text-sm">Concierge</div>
               </div>
             </div>
 
@@ -295,11 +303,11 @@ export default function MarketplacePage() {
           </div>
         </div>
 
-        {/* Luxury Corner Accents */}
-        <div className="absolute top-12 left-12 w-32 h-32 border-l-2 border-t-2 border-gold-medium/30 animate-fade-in"></div>
-        <div className="absolute top-12 right-12 w-32 h-32 border-r-2 border-t-2 border-gold-medium/30 animate-fade-in" style={{ animationDelay: '0.2s' }}></div>
-        <div className="absolute bottom-12 left-12 w-32 h-32 border-l-2 border-b-2 border-gold-medium/30 animate-fade-in" style={{ animationDelay: '0.4s' }}></div>
-        <div className="absolute bottom-12 right-12 w-32 h-32 border-r-2 border-b-2 border-gold-medium/30 animate-fade-in" style={{ animationDelay: '0.6s' }}></div>
+        {/* Luxury Corner Accents - Hidden on mobile */}
+        <div className="hidden md:block absolute top-12 left-12 w-32 h-32 border-l-2 border-t-2 border-gold-medium/30 animate-fade-in"></div>
+        <div className="hidden md:block absolute top-12 right-12 w-32 h-32 border-r-2 border-t-2 border-gold-medium/30 animate-fade-in" style={{ animationDelay: '0.2s' }}></div>
+        <div className="hidden md:block absolute bottom-12 left-12 w-32 h-32 border-l-2 border-b-2 border-gold-medium/30 animate-fade-in" style={{ animationDelay: '0.4s' }}></div>
+        <div className="hidden md:block absolute bottom-12 right-12 w-32 h-32 border-r-2 border-b-2 border-gold-medium/30 animate-fade-in" style={{ animationDelay: '0.6s' }}></div>
       </section>
 
       {/* Premium Filters & Search */}
@@ -309,11 +317,16 @@ export default function MarketplacePage() {
         </div>
 
         <div className="max-w-7xl mx-auto relative">
-          <div className="flex flex-col lg:flex-row gap-8 items-center justify-between mb-8">
+          <div
+            ref={filterSection.ref}
+            className={`flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8 items-center justify-between mb-8 transition-all duration-1000 ${
+              filterSection.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            }`}
+          >
             {/* Filter Tabs */}
             <div className="w-full lg:w-auto overflow-x-auto">
               <div className="filter-tabs backdrop-blur-xl bg-black-rich/50 p-2 rounded-full border border-gold-medium/20 inline-flex min-w-min">
-                {["all", "hypercar", "supercar", "classic", "luxury", "electric", "available", "sold", "coming_soon"].map((filter) => (
+                {["all", "supercar", "classic", "luxury", "electric", "available", "sold", "coming_soon"].map((filter) => (
                   <button
                     key={filter}
                     onClick={() => setActiveFilter(filter)}
@@ -326,7 +339,7 @@ export default function MarketplacePage() {
             </div>
 
             {/* Luxury Search */}
-            <div className="relative group">
+            <div className="relative group w-full lg:w-auto">
               <div className="absolute inset-0 bg-gradient-to-r from-gold-medium/20 to-gold-light/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="luxury-search relative backdrop-blur-xl bg-black-rich/50 border-gold-medium/30">
                 <Search className="search-icon text-gold-medium" />
@@ -335,7 +348,7 @@ export default function MarketplacePage() {
                   placeholder="Search exclusive collection..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-transparent"
+                  className="bg-transparent w-full"
                 />
               </div>
             </div>
@@ -423,9 +436,9 @@ export default function MarketplacePage() {
                       {/* Badge */}
                       {car.badge && (
                         <div className="absolute top-4 right-4">
-                          <div className="flex items-center gap-2 px-4 py-2 bg-gold-medium/90 backdrop-blur-md rounded-full">
-                            <Award className="w-4 h-4 text-black" />
-                            <span className="text-black text-xs font-bold uppercase tracking-wider">{car.badge}</span>
+                          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-gold-medium to-gold-light backdrop-blur-md rounded-full shadow-lg">
+                            <Award className="w-3.5 h-3.5 text-black" />
+                            <span className="text-black text-xs font-bold uppercase tracking-wide">{car.badge}</span>
                           </div>
                         </div>
                       )}
@@ -452,51 +465,47 @@ export default function MarketplacePage() {
                       {/* Car Details */}
                       <div className="p-6 space-y-4 md:w-3/5 flex flex-col justify-between">
                         {/* Name and Year */}
-                        <div className="flex items-start justify-between">
-                        <h3 className="font-display text-2xl text-gold-medium group-hover:text-gold-light transition-colors leading-tight">
+                        <div className="flex items-start justify-between gap-3">
+                        <h3 className="font-display text-lg md:text-2xl font-bold text-gold-medium group-hover:text-gold-light transition-colors leading-tight">
                           {car.name}
                         </h3>
-                        <span className="text-gold-light text-sm font-body bg-gold-medium/10 px-3 py-1 rounded-full">
+                        <span className="text-white text-xs font-bold bg-turquoise-500/20 backdrop-blur-md border border-turquoise-400/30 px-3 py-1 rounded-full whitespace-nowrap shadow-lg">
                           {car.year}
                         </span>
                         </div>
 
                         {/* Price */}
-                        <div className="flex items-baseline gap-2">
-                          {car.show_price ? (
+                        {car.show_price && (
+                          <div className="flex items-baseline gap-2">
                             <div className="text-3xl font-display">
                               {formatPrice(car.price, car.price_currency || 'USD')}
                             </div>
-                          ) : (
-                            <span className="text-2xl font-display text-gold-medium">
-                              Contact for Price
-                            </span>
-                          )}
-                        </div>
+                          </div>
+                        )}
 
                         <div className="divider-gold opacity-30"></div>
 
                         {/* Specs Grid */}
-                        <div className="grid grid-cols-2 gap-3">
-                        <div className="flex items-center gap-2">
-                          <Zap className="w-4 h-4 text-gold-medium" />
+                        <div className="grid grid-cols-3 gap-2 md:gap-3">
+                        <div className="flex items-center gap-1.5 border border-white/10 rounded-lg p-2">
+                          <Zap className="w-3 h-3 md:w-4 md:h-4 text-gold-medium flex-shrink-0" />
                           <div>
-                            <div className="text-caption text-white-soft/60">Power</div>
-                            <div className="text-white-soft text-sm font-semibold">{car.horsepower || 'N/A'}</div>
+                            <div className="text-[0.6rem] md:text-caption text-white-soft/60">Power</div>
+                            <div className="text-white-soft text-[0.64rem] md:text-sm font-semibold">{car.horsepower || 'N/A'}</div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <TrendingUp className="w-4 h-4 text-gold-medium" />
+                        <div className="flex items-center gap-1.5 border border-white/10 rounded-lg p-2">
+                          <TrendingUp className="w-3 h-3 md:w-4 md:h-4 text-gold-medium flex-shrink-0" />
                           <div>
-                            <div className="text-caption text-white-soft/60">0-60mph</div>
-                            <div className="text-white-soft text-sm font-semibold">{car.acceleration || 'N/A'}</div>
+                            <div className="text-[0.6rem] md:text-caption text-white-soft/60">0-60mph</div>
+                            <div className="text-white-soft text-[0.64rem] md:text-sm font-semibold">{car.acceleration || 'N/A'}</div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Gauge className="w-4 h-4 text-gold-medium" />
+                        <div className="flex items-center gap-1.5 border border-white/10 rounded-lg p-2">
+                          <Gauge className="w-3 h-3 md:w-4 md:h-4 text-gold-medium flex-shrink-0" />
                           <div>
-                            <div className="text-caption text-white-soft/60">Mileage</div>
-                            <div className="text-white-soft text-sm font-semibold">{car.mileage || 'N/A'}</div>
+                            <div className="text-[0.6rem] md:text-caption text-white-soft/60">Mileage</div>
+                            <div className="text-white-soft text-[0.64rem] md:text-sm font-semibold">{car.mileage || 'N/A'}</div>
                           </div>
                         </div>
                         </div>
@@ -533,13 +542,13 @@ export default function MarketplacePage() {
 
       {/* Enhanced Modal */}
       {selectedCar && isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl animate-fade-in" onClick={closeModal}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4 bg-black/90 backdrop-blur-xl animate-fade-in" onClick={closeModal}>
           <div
-            className="relative bg-gradient-to-br from-black-rich to-black-soft border border-gold-medium/30 rounded-xl max-w-6xl w-full max-h-[90vh] overflow-y-auto shadow-2xl shadow-gold-medium/20 animate-scale-in"
+            className="relative bg-gradient-to-br from-black-rich to-black-soft border border-gold-medium/30 rounded-xl max-w-6xl w-full max-h-[95vh] md:max-h-[90vh] overflow-y-auto shadow-2xl shadow-gold-medium/20 animate-scale-in"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header with Image Gallery */}
-            <div className="relative h-96">
+            <div className="relative h-64 md:h-96">
               <img
                 src={selectedCar.gallery[currentImageIndex] || selectedCar.primaryImage || '/placeholder-car.jpg'}
                 alt={selectedCar.name}
@@ -558,25 +567,25 @@ export default function MarketplacePage() {
                       e.stopPropagation()
                       prevImage()
                     }}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/50 hover:bg-black/70 border border-white/30 text-white rounded-full transition-all z-10"
+                    className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-1.5 md:p-2 bg-black/50 hover:bg-black/70 border border-white/30 text-white rounded-full transition-all z-10"
                   >
-                    <ArrowLeft className="w-5 h-5" />
+                    <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
                   </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
                       nextImage()
                     }}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/50 hover:bg-black/70 border border-white/30 text-white rounded-full transition-all z-10"
+                    className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-1.5 md:p-2 bg-black/50 hover:bg-black/70 border border-white/30 text-white rounded-full transition-all z-10"
                   >
-                    <ArrowRight className="w-5 h-5" />
+                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
                   </button>
                 </>
               )}
 
               {/* Image Counter */}
               {selectedCar.gallery.length > 1 && (
-                <div className="absolute bottom-4 left-4 px-3 py-1 bg-black/70 backdrop-blur-md text-white text-sm rounded-full">
+                <div className="absolute bottom-2 md:bottom-4 left-2 md:left-4 px-2 md:px-3 py-1 bg-black/70 backdrop-blur-md text-white text-xs md:text-sm rounded-full">
                   {currentImageIndex + 1} / {selectedCar.gallery.length}
                 </div>
               )}
@@ -585,85 +594,93 @@ export default function MarketplacePage() {
 
               <button
                 onClick={closeModal}
-                className="absolute top-6 right-6 p-3 bg-black/70 backdrop-blur-md border border-gold-medium/50 text-gold-medium hover:text-gold-light hover:border-gold-light transition-all rounded-full group"
+                className="absolute top-3 md:top-6 right-3 md:right-6 p-2 md:p-3 bg-black/70 backdrop-blur-md border border-gold-medium/50 text-gold-medium hover:text-gold-light hover:border-gold-light transition-all rounded-full group"
               >
-                <X className="w-6 h-6 group-hover:rotate-90 transition-transform" />
+                <X className="w-5 h-5 md:w-6 md:h-6 group-hover:rotate-90 transition-transform" />
               </button>
 
-              <div className="absolute bottom-8 left-8 right-8">
-                <div className="flex items-end justify-between">
-                  <div>
-                    <h2 className="font-display text-4xl md:text-5xl text-gold-medium mb-3">
-                      {selectedCar.name}
-                    </h2>
-                    <div className="flex items-center gap-4 flex-wrap">
-                      <span className="text-gold-light text-xl font-display">{selectedCar.year}</span>
-                      <span className={`px-4 py-2 rounded-full text-sm font-bold uppercase backdrop-blur-md ${
-                        selectedCar.status === 'available' ? 'bg-green-500/30 text-green-400 border border-green-500/50' :
-                        'bg-red-500/30 text-red-400 border border-red-500/50'
-                      }`}>
-                        {selectedCar.status.replace("_", " ")}
-                      </span>
-                      {selectedCar.is_exclusive && (
-                        <span className="flex items-center gap-2 px-4 py-2 bg-gold-medium/20 backdrop-blur-md border border-gold-medium/50 rounded-full">
-                          <Crown className="w-4 h-4 text-gold-medium" />
-                          <span className="text-gold-medium text-sm font-bold uppercase">Exclusive</span>
-                        </span>
-                      )}
+              {/* Year and Status - Top Left */}
+              <div className="absolute top-4 md:top-8 left-4 md:left-8">
+                <div className="flex items-center gap-2 md:gap-3 flex-wrap">
+                  <span className="text-white text-xs md:text-sm font-bold bg-turquoise-500/30 backdrop-blur-md border border-turquoise-400/40 px-3 md:px-4 py-1.5 md:py-2 rounded-full shadow-lg">
+                    {selectedCar.year}
+                  </span>
+                  <span className={`px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-bold uppercase backdrop-blur-md shadow-lg ${
+                    selectedCar.status === 'available' ? 'bg-green-700/40 text-green-300 border border-green-600/60' :
+                    'bg-red-500/30 text-red-400 border border-red-500/50'
+                  }`}>
+                    {selectedCar.status.replace("_", " ")}
+                  </span>
+                  {selectedCar.is_exclusive && (
+                    <span className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-1.5 md:py-2 bg-gold-medium/20 backdrop-blur-md border border-gold-medium/50 rounded-full shadow-lg">
+                      <Crown className="w-3 h-3 md:w-4 md:h-4 text-gold-medium" />
+                      <span className="text-gold-medium text-xs md:text-sm font-bold uppercase">Exclusive</span>
+                    </span>
+                  )}
+                </div>
+              </div>
+
+            </div>
+
+            {/* Title and Price Section - Below Image */}
+            <div className="bg-black/60 backdrop-blur-md border-b border-white/10 px-4 md:px-8 py-4 md:py-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+                <div>
+                  <h2 className="font-display text-xl md:text-3xl lg:text-4xl text-gold-medium">
+                    {selectedCar.name}
+                  </h2>
+                </div>
+                <div className="text-left md:text-right">
+                  {selectedCar.show_price && (
+                    <div className="text-2xl md:text-3xl lg:text-4xl font-display text-white">
+                      {formatPrice(selectedCar.price, selectedCar.price_currency || 'USD')}
                     </div>
-                  </div>
-                  <div className="text-right">
-                    {selectedCar.show_price && (
-                      <div className="text-5xl font-display">
-                        {formatPrice(selectedCar.price, selectedCar.price_currency || 'USD')}
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
 
             {/* Modal Content */}
-            <div className="p-8 md:p-12">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div className="space-y-8">
+            <div className="p-3 md:p-5 lg:p-7">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5 lg:gap-7">
+                <div className="space-y-4 md:space-y-5">
                   <div>
-                    <h3 className="font-display text-2xl text-gold-medium mb-4 flex items-center gap-3">
-                      <Diamond className="w-5 h-5" />
+                    <h3 className="font-display text-lg md:text-xl text-gold-medium mb-2 md:mb-3 flex items-center gap-2">
+                      <Diamond className="w-3.5 h-3.5 md:w-4 md:h-4" />
                       Description
                     </h3>
-                    <p className="text-white-soft leading-relaxed text-lg">
+                    <p className="text-white-soft leading-relaxed text-xs md:text-sm lg:text-base">
                       {selectedCar.description || `Experience the ultimate in luxury and performance with this exceptional ${selectedCar.make} ${selectedCar.model}. This vehicle represents the pinnacle of automotive engineering and design.`}
                     </p>
                   </div>
 
                   <div>
-                    <h3 className="font-display text-2xl text-gold-medium mb-4 flex items-center gap-3">
-                      <Star className="w-5 h-5" />
+                    <h3 className="font-display text-lg md:text-xl text-gold-medium mb-2 md:mb-3 flex items-center gap-2">
+                      <Star className="w-3.5 h-3.5 md:w-4 md:h-4" />
                       Features
                     </h3>
                     {selectedCar.features.length > 0 ? (
-                      <ul className="space-y-3">
+                      <ul className="space-y-1.5 md:space-y-2">
                         {selectedCar.features.map((feature: string, index: number) => (
-                          <li key={index} className="flex items-start gap-3 text-white-soft">
-                            <Crown className="w-5 h-5 text-gold-medium flex-shrink-0 mt-1" />
-                            <span className="text-base">{feature}</span>
+                          <li key={index} className="flex items-start gap-2 text-white-soft">
+                            <Crown className="w-3.5 h-3.5 md:w-4 md:h-4 text-gold-medium flex-shrink-0 mt-0.5" />
+                            <span className="text-xs md:text-sm">{feature}</span>
                           </li>
                         ))}
                       </ul>
                     ) : (
-                      <p className="text-white-soft/70">Feature details available upon inquiry.</p>
+                      <p className="text-white-soft/70 text-xs md:text-sm">Feature details available upon inquiry.</p>
                     )}
                   </div>
                 </div>
 
-                <div className="space-y-8">
-                  <div className="bg-black-rich/50 backdrop-blur-xl p-8 rounded-lg border border-gold-medium/20">
-                    <h3 className="font-display text-2xl text-gold-medium mb-6">
+                <div className="space-y-4 md:space-y-5">
+                  <div className="bg-black-rich/50 backdrop-blur-xl p-3 md:p-4 lg:p-5 rounded-lg border border-gold-medium/20">
+                    <h3 className="font-display text-lg md:text-xl text-gold-medium mb-3 md:mb-4">
                       Specifications
                     </h3>
 
-                    <div className="space-y-4">
+                    <div className="space-y-2 md:space-y-2.5">
                       {[
                         { label: 'Make', value: selectedCar.make },
                         { label: 'Model', value: selectedCar.model },
@@ -674,29 +691,29 @@ export default function MarketplacePage() {
                         { label: 'Top Speed', value: selectedCar.top_speed || 'N/A' },
                         { label: 'Mileage', value: selectedCar.mileage || 'N/A' },
                       ].filter(spec => spec.value && spec.value !== 'N/A').map((spec, idx) => (
-                        <div key={idx} className="flex justify-between items-center py-3 border-b border-gold-medium/10 last:border-0">
-                          <span className="text-white-soft/70 font-medium">{spec.label}</span>
-                          <span className="text-white-soft font-semibold text-right">{spec.value}</span>
+                        <div key={idx} className="flex justify-between items-center py-1.5 md:py-2 border-b border-gold-medium/10 last:border-0">
+                          <span className="text-white-soft/70 font-medium text-xs md:text-sm">{spec.label}</span>
+                          <span className="text-white-soft font-semibold text-right text-xs md:text-sm">{spec.value}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-2.5 md:space-y-3">
                     <a href={`/virtual-tour?carId=${selectedCar.id}`} className="block">
-                      <button className="w-full bg-white hover:bg-gray-100 text-black px-8 py-5 font-bold text-lg uppercase tracking-wider hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 rounded-lg group shadow-lg">
-                        <Play className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                      <button className="w-full bg-white hover:bg-gray-100 text-black px-4 md:px-6 py-2.5 md:py-4 font-bold text-xs md:text-sm lg:text-base uppercase tracking-wider hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2 rounded-lg group shadow-lg">
+                        <Play className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-5 lg:h-5 group-hover:scale-110 transition-transform" />
                         Gallery
-                        <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                        <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4 lg:w-5 lg:h-5 group-hover:translate-x-2 transition-transform" />
                       </button>
                     </a>
 
                     <a href={generateWhatsAppUrl(selectedCar)} target="_blank" rel="noopener noreferrer" className="block">
-                      <button className="w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black px-6 py-3 font-semibold text-base uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 rounded-lg group">
-                        <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                      <button className="w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black px-4 md:px-5 py-2 md:py-2.5 font-semibold text-xs md:text-sm uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 rounded-lg group">
+                        <svg className="w-3.5 h-3.5 md:w-4 md:h-4 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
                         </svg>
-                        Contact via WhatsApp
+                        Contact for Price
                       </button>
                     </a>
                   </div>

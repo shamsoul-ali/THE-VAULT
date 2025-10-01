@@ -41,6 +41,10 @@ module.exports = {
           DEFAULT: "var(--card)",
           foreground: "var(--card-foreground)",
         },
+        turquoise: {
+          400: '#40E0D0',
+          500: '#30C5BB',
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
