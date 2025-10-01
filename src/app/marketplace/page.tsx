@@ -123,18 +123,41 @@ export default function MarketplacePage() {
     }
   };
 
-  const formatPrice = (price: number, currency: string = 'USD') => {
-    return new Intl.NumberFormat('en-US', {
+  const formatPrice = (price: number, currency: string = 'USD', showRM: boolean = true) => {
+    const usdPrice = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currency,
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(price);
+
+    if (showRM) {
+      const rmPrice = (price * 4).toLocaleString();
+      return (
+        <div className="flex flex-col">
+          <span className="text-gold-medium">{usdPrice}</span>
+          <span className="text-gold-light text-sm">RM {rmPrice}</span>
+        </div>
+      );
+    }
+
+    return usdPrice;
+  };
+
+  const formatPriceText = (price: number, currency: string = 'USD') => {
+    const usdPrice = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(price);
+    return usdPrice;
   };
 
   const generateWhatsAppUrl = (car: CarWithImages) => {
     const phoneNumber = '60124134002';
-    const message = `Hi! I'm interested in the ${car.year} ${car.make} ${car.model} (${car.name}) listed at ${formatPrice(car.price, car.price_currency || 'USD')}. I'd like to know more about this vehicle. Status: ${car.status.replace('_', ' ').toUpperCase()}`;
+    const priceText = car.show_price ? formatPriceText(car.price, car.price_currency || 'USD') : 'Contact for Price';
+    const message = `Hi! I'm interested in the ${car.year} ${car.make} ${car.model} (${car.name}) listed at ${priceText}. I'd like to know more about this vehicle. Status: ${car.status.replace('_', ' ').toUpperCase()}`;
     const encodedMessage = encodeURIComponent(message);
     return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
   };
@@ -327,7 +350,7 @@ export default function MarketplacePage() {
           )}
 
           {!loading && !error && filteredCars.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="flex flex-col gap-8">
               {filteredCars.map((car, index) => (
                 <div
                   key={car.id}
@@ -341,8 +364,10 @@ export default function MarketplacePage() {
                     {/* Glow Effect on Hover */}
                     <div className="absolute inset-0 bg-gradient-to-br from-gold-medium/0 via-gold-light/0 to-gold-medium/0 opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none"></div>
 
-                    {/* Car Image */}
-                    <div className="relative h-72 overflow-hidden">
+                    {/* Horizontal Layout Container */}
+                    <div className="flex flex-col md:flex-row h-full">
+                      {/* Car Image */}
+                      <div className="relative h-72 md:h-96 md:w-2/5 overflow-hidden">
                       <img
                         src={car.primaryImage || car.gallery[0] || '/placeholder-car.jpg'}
                         alt={car.name}
@@ -395,31 +420,36 @@ export default function MarketplacePage() {
                           View Details
                         </Button>
                       </div>
-                    </div>
 
-                    {/* Car Details */}
-                    <div className="p-6 space-y-4">
-                      {/* Name and Year */}
-                      <div className="flex items-start justify-between">
+                      {/* Car Details */}
+                      <div className="p-6 space-y-4 md:w-3/5 flex flex-col justify-between">
+                        {/* Name and Year */}
+                        <div className="flex items-start justify-between">
                         <h3 className="font-display text-2xl text-gold-medium group-hover:text-gold-light transition-colors leading-tight">
                           {car.name}
                         </h3>
                         <span className="text-gold-light text-sm font-body bg-gold-medium/10 px-3 py-1 rounded-full">
                           {car.year}
                         </span>
-                      </div>
+                        </div>
 
-                      {/* Price */}
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-3xl font-display text-gold-medium">
-                          {formatPrice(car.price, car.price_currency || 'USD')}
-                        </span>
-                      </div>
+                        {/* Price */}
+                        <div className="flex items-baseline gap-2">
+                          {car.show_price ? (
+                            <div className="text-3xl font-display">
+                              {formatPrice(car.price, car.price_currency || 'USD')}
+                            </div>
+                          ) : (
+                            <span className="text-2xl font-display text-gold-medium">
+                              Contact for Price
+                            </span>
+                          )}
+                        </div>
 
-                      <div className="divider-gold opacity-30"></div>
+                        <div className="divider-gold opacity-30"></div>
 
-                      {/* Specs Grid */}
-                      <div className="grid grid-cols-2 gap-3">
+                        {/* Specs Grid */}
+                        <div className="grid grid-cols-2 gap-3">
                         <div className="flex items-center gap-2">
                           <Zap className="w-4 h-4 text-gold-medium" />
                           <div>
@@ -441,29 +471,23 @@ export default function MarketplacePage() {
                             <div className="text-white-soft text-sm font-semibold">{car.mileage || 'N/A'}</div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-gold-medium" />
-                          <div>
-                            <div className="text-caption text-white-soft/60">Location</div>
-                            <div className="text-white-soft text-sm font-semibold">{car.location || 'N/A'}</div>
-                          </div>
                         </div>
-                      </div>
 
-                      <div className="divider-gold opacity-30"></div>
+                        <div className="divider-gold opacity-30"></div>
 
-                      {/* Action Buttons */}
-                      <div className="flex gap-3">
-                        <Button className="btn-luxury-outline flex-1 group/btn">
-                          <Heart className="w-4 h-4 mr-2 group-hover/btn:fill-current transition-all" />
-                          Save
-                        </Button>
-                        <a href={generateWhatsAppUrl(car)} target="_blank" rel="noopener noreferrer" className="flex-1">
-                          <Button className="btn-luxury w-full group/btn">
-                            Inquire
-                            <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                        {/* Action Buttons */}
+                        <div className="flex gap-3">
+                          <Button className="btn-luxury-outline flex-1 group/btn">
+                            <Heart className="w-4 h-4 mr-2 group-hover/btn:fill-current transition-all" />
+                            Save
                           </Button>
-                        </a>
+                          <a href={generateWhatsAppUrl(car)} target="_blank" rel="noopener noreferrer" className="flex-1">
+                            <Button className="btn-luxury w-full group/btn">
+                              Inquire
+                              <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                            </Button>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -501,7 +525,7 @@ export default function MarketplacePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="flex flex-col gap-12">
               {allCars.filter(car => car.status === 'coming_soon').map((car, index) => (
                 <div
                   key={car.id}
@@ -510,7 +534,9 @@ export default function MarketplacePage() {
                 >
                   <div className="relative bg-gradient-to-br from-black-rich to-black-soft border border-gold-medium/20 rounded-lg overflow-hidden hover:border-gold-medium/60 hover:shadow-2xl hover:shadow-gold-medium/20 transition-all duration-500">
 
-                    <div className="relative h-80 overflow-hidden">
+                    {/* Horizontal Layout Container */}
+                    <div className="flex flex-col md:flex-row h-full">
+                      <div className="relative h-80 md:h-96 md:w-2/5 overflow-hidden">
                       <img
                         src={car.primaryImage || car.gallery[0] || '/placeholder-car.jpg'}
                         alt={car.name}
@@ -534,43 +560,42 @@ export default function MarketplacePage() {
                           <span className="text-black text-sm font-bold">{car.year}</span>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="p-8 space-y-6">
-                      <div className="flex items-start justify-between">
-                        <h3 className="font-display text-3xl text-gold-medium group-hover:text-gold-light transition-colors">
-                          {car.name}
-                        </h3>
-                        <span className="text-gold-light text-lg font-body">{car.year}</span>
-                      </div>
+                      <div className="p-8 space-y-6 md:w-3/5 flex flex-col justify-between">
+                        <div className="flex items-start justify-between">
+                          <h3 className="font-display text-3xl text-gold-medium group-hover:text-gold-light transition-colors">
+                            {car.name}
+                          </h3>
+                          <span className="text-gold-light text-lg font-body">{car.year}</span>
+                        </div>
 
-                      <p className="text-white-soft leading-relaxed">
-                        {car.description || `Experience the ultimate in luxury and performance with this exceptional ${car.make} ${car.model}.`}
-                      </p>
+                        <p className="text-white-soft leading-relaxed">
+                          {car.description || `Experience the ultimate in luxury and performance with this exceptional ${car.make} ${car.model}.`}
+                        </p>
 
-                      <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-4">
                         <div className="bg-black-rich/50 p-4 rounded border border-gold-medium/10">
                           <span className="text-caption text-gold-medium block mb-2">Engine</span>
                           <span className="text-white-soft font-semibold">{car.engine || 'TBA'}</span>
                         </div>
-                        <div className="bg-black-rich/50 p-4 rounded border border-gold-medium/10">
-                          <span className="text-caption text-gold-medium block mb-2">Power</span>
-                          <span className="text-white-soft font-semibold">{car.horsepower || 'TBA'}</span>
+                          <div className="bg-black-rich/50 p-4 rounded border border-gold-medium/10">
+                            <span className="text-caption text-gold-medium block mb-2">Power</span>
+                            <span className="text-white-soft font-semibold">{car.horsepower || 'TBA'}</span>
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="divider-gold"></div>
+                        <div className="divider-gold"></div>
 
-                      <div className="flex gap-4">
-                        <Button className="btn-luxury flex-1 group/btn">
-                          <Calendar className="w-5 h-5 mr-2" />
-                          Reserve Now
-                        </Button>
-                        <Button className="btn-luxury-outline flex-1 group/btn">
-                          <Heart className="w-5 h-5 mr-2 group-hover/btn:fill-current transition-all" />
-                          Wishlist
-                        </Button>
-                      </div>
+                        <div className="flex gap-4">
+                          <Button className="btn-luxury flex-1 group/btn">
+                            <Calendar className="w-5 h-5 mr-2" />
+                            Reserve Now
+                          </Button>
+                          <Button className="btn-luxury-outline flex-1 group/btn">
+                            <Heart className="w-5 h-5 mr-2 group-hover/btn:fill-current transition-all" />
+                            Wishlist
+                          </Button>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -662,7 +687,15 @@ export default function MarketplacePage() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-5xl font-display text-gold-medium">{formatPrice(selectedCar.price, selectedCar.price_currency || 'USD')}</div>
+                    {selectedCar.show_price ? (
+                      <div className="text-5xl font-display">
+                        {formatPrice(selectedCar.price, selectedCar.price_currency || 'USD')}
+                      </div>
+                    ) : (
+                      <div className="text-4xl font-display text-gold-medium">
+                        Contact for Price
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -712,13 +745,12 @@ export default function MarketplacePage() {
                       {[
                         { label: 'Make', value: selectedCar.make },
                         { label: 'Model', value: selectedCar.model },
-                        { label: 'Year', value: selectedCar.year.toString() },
+                        { label: 'Year Manufactured', value: selectedCar.year.toString() },
                         { label: 'Engine', value: selectedCar.engine || 'N/A' },
                         { label: 'Power', value: selectedCar.horsepower || 'N/A' },
                         { label: '0-60mph', value: selectedCar.acceleration || 'N/A' },
                         { label: 'Top Speed', value: selectedCar.top_speed || 'N/A' },
                         { label: 'Mileage', value: selectedCar.mileage || 'N/A' },
-                        { label: 'Location', value: selectedCar.location || 'N/A' }
                       ].filter(spec => spec.value && spec.value !== 'N/A').map((spec, idx) => (
                         <div key={idx} className="flex justify-between items-center py-3 border-b border-gold-medium/10 last:border-0">
                           <span className="text-white-soft/70 font-medium">{spec.label}</span>
