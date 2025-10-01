@@ -185,12 +185,6 @@ export default function MarketplacePage() {
     return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
   };
 
-  const generateWhatsAppUrl = (car: CarWithImages) => {
-    const phoneNumber = '60124134002';
-    const message = `Hi! I'm interested in the ${car.year} ${car.make} ${car.model} (${car.name}) listed at ${formatPrice(car.price, car.price_currency || 'USD')}. I'd like to know more about this vehicle. Status: ${car.status.replace('_', ' ').toUpperCase()}`;
-    const encodedMessage = encodeURIComponent(message);
-    return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-  };
 
   const openModal = (car: CarWithImages) => {
     setSelectedCar(car);
@@ -509,7 +503,6 @@ export default function MarketplacePage() {
 
                         <div className="divider-gold opacity-30"></div>
 
-<<<<<<< HEAD
                         {/* Action Buttons */}
                         <div className="flex gap-3">
                           <Button className="btn-luxury-outline flex-1 group/btn">
@@ -527,20 +520,6 @@ export default function MarketplacePage() {
                             <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                           </Button>
                         </div>
-=======
-                      {/* Action Buttons */}
-                      <div className="flex gap-3">
-                        <Button className="btn-luxury-outline flex-1 group/btn">
-                          <Heart className="w-4 h-4 mr-2 group-hover/btn:fill-current transition-all" />
-                          Save
-                        </Button>
-                        <a href={generateWhatsAppUrl(car)} target="_blank" rel="noopener noreferrer" className="flex-1">
-                          <Button className="btn-luxury w-full group/btn">
-                            Inquire
-                            <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                          </Button>
-                        </a>
->>>>>>> origin/main
                       </div>
                     </div>
                   </div>
