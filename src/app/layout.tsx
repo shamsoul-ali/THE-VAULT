@@ -17,8 +17,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Revura | Private Auto Auctions",
-  description: "Exclusive invitation-only auctions for rare and limited supercars. By invitation only.",
+  title: "REVURA",
+  description: "Where Performance Meets Presence",
   keywords: ["luxury cars", "supercars", "auctions", "private", "exclusive", "Malaysia"],
 };
 
