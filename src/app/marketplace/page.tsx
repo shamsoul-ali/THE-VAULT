@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, Eye, Calendar, MapPin, Fuel, Gauge, Crown, Diamond, Star, Play, Heart, ArrowRight, ArrowLeft, X, Zap, Award, TrendingUp } from "lucide-react";
+import { Search, Filter, Eye, Calendar, MapPin, Fuel, Gauge, Crown, Diamond, Star, Play, Heart, ArrowRight, ArrowLeft, X, Zap, Award, TrendingUp, ChevronDown } from "lucide-react";
 import { createBrowserClient } from '@supabase/ssr'
 import { Car, CarImage, Database } from '@/lib/supabase/types'
 
@@ -24,6 +24,18 @@ export default function MarketplacePage() {
   const [allCars, setAllCars] = useState<CarWithImages[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+
+  // Hero slideshow images
+  const heroImages = [
+    '/html/imagesslides/DSC02820.jpg',
+    '/html/imagesslides/DSC03009.jpg',
+    '/html/imagesslides/DSC03211.jpg',
+    '/html/imagesslides/DSC03304.jpg',
+    '/html/imagesslides/PDP04595.jpg',
+    '/html/imagesslides/PDP04616.jpg',
+    '/html/imagesslides/PDP04837.jpg',
+  ];
 
   // Create Supabase client
   const supabase = createBrowserClient<Database>(
@@ -35,6 +47,17 @@ export default function MarketplacePage() {
   useEffect(() => {
     fetchCars();
   }, []);
+
+  // Hero slideshow effect - change image every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlideIndex((prevIndex) =>
+        prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
 
   // Filter cars based on active filter and search query
   useEffect(() => {
@@ -155,7 +178,7 @@ export default function MarketplacePage() {
   };
 
   const generateWhatsAppUrl = (car: CarWithImages) => {
-    const phoneNumber = '60124134002';
+    const phoneNumber = '60122946022';
     const priceText = car.show_price ? formatPriceText(car.price, car.price_currency || 'USD') : 'Contact for Price';
     const message = `Hi! I'm interested in the ${car.year} ${car.make} ${car.model} (${car.name}) listed at ${priceText}. I'd like to know more about this vehicle. Status: ${car.status.replace('_', ' ').toUpperCase()}`;
     const encodedMessage = encodeURIComponent(message);
@@ -193,20 +216,26 @@ export default function MarketplacePage() {
   return (
     <div className="min-h-screen bg-background pt-20">
       {/* Cinematic Hero Section */}
-      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-black-pure via-black-rich to-black-soft">
-        {/* Animated Background Elements */}
+      <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
+        {/* Background Slideshow */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold-medium to-transparent opacity-60 animate-shimmer" />
-          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold-medium to-transparent opacity-60 animate-shimmer" style={{ animationDelay: '1s' }} />
+          {heroImages.map((image, index) => (
+            <div
+              key={image}
+              className={`absolute inset-0 transition-opacity duration-1000 ${
+                index === currentSlideIndex ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <img
+                src={image}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
 
-          {/* Floating Orbs */}
-          <div className="absolute top-20 left-20 w-72 h-72 bg-gold-medium/10 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-gold-light/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-
-          {/* Grid Pattern */}
-          <div className="absolute inset-0 opacity-[0.03]" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8aa6e' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }} />
+          {/* Black opacity overlay */}
+          <div className="absolute inset-0 bg-black/85"></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
@@ -226,7 +255,6 @@ export default function MarketplacePage() {
             {/* Decorative Divider */}
             <div className="flex items-center justify-center gap-4 mb-8">
               <div className="w-24 h-px bg-gradient-to-r from-transparent to-gold-medium"></div>
-              <Diamond className="w-4 h-4 text-gold-medium rotate-45" />
               <div className="w-24 h-px bg-gradient-to-l from-transparent to-gold-medium"></div>
             </div>
 
@@ -259,13 +287,9 @@ export default function MarketplacePage() {
               </div>
             </div>
 
-            {/* CTA Button */}
-            <a href="#collection">
-              <Button className="btn-luxury text-lg px-12 py-6 group animate-premium-glow">
-                <Eye className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-                Explore Collection
-                <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-2 transition-transform" />
-              </Button>
+            {/* Scroll Down Arrow */}
+            <a href="#collection" className="inline-block animate-bounce">
+              <ChevronDown className="w-6 h-6 text-gold-medium hover:text-gold-light transition-colors" />
             </a>
           </div>
         </div>
@@ -278,24 +302,26 @@ export default function MarketplacePage() {
       </section>
 
       {/* Premium Filters & Search */}
-      <section id="collection" className="py-20 px-4 bg-gradient-to-br from-black-soft to-black-rich relative">
+      <section id="collection" className="py-8 px-4 bg-gradient-to-br from-black-soft to-black-rich relative">
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-gold-medium/20 to-transparent blur-3xl"></div>
         </div>
 
         <div className="max-w-7xl mx-auto relative">
-          <div className="flex flex-col lg:flex-row gap-8 items-center justify-between mb-16">
+          <div className="flex flex-col lg:flex-row gap-8 items-center justify-between mb-8">
             {/* Filter Tabs */}
-            <div className="filter-tabs backdrop-blur-xl bg-black-rich/50 p-2 rounded-full border border-gold-medium/20">
-              {["all", "hypercar", "supercar", "classic", "luxury", "electric", "available", "sold", "coming_soon"].map((filter) => (
-                <button
-                  key={filter}
-                  onClick={() => setActiveFilter(filter)}
-                  className={`filter-tab ${activeFilter === filter ? "active" : ""} transition-all duration-300`}
-                >
-                  {filter.replace("_", " ").replace("-", " ").toUpperCase()}
-                </button>
-              ))}
+            <div className="w-full lg:w-auto overflow-x-auto">
+              <div className="filter-tabs backdrop-blur-xl bg-black-rich/50 p-2 rounded-full border border-gold-medium/20 inline-flex min-w-min">
+                {["all", "hypercar", "supercar", "classic", "luxury", "electric", "available", "sold", "coming_soon"].map((filter) => (
+                  <button
+                    key={filter}
+                    onClick={() => setActiveFilter(filter)}
+                    className={`filter-tab whitespace-nowrap ${activeFilter === filter ? "active" : ""} transition-all duration-300`}
+                  >
+                    {filter.replace("_", " ").replace("-", " ").toUpperCase()}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Luxury Search */}
@@ -317,7 +343,7 @@ export default function MarketplacePage() {
       </section>
 
       {/* Premium Car Gallery */}
-      <section className="py-24 px-4 bg-gradient-to-br from-black-rich via-black-pure to-black-soft relative overflow-hidden">
+      <section className="pt-4 pb-12 px-4 bg-gradient-to-br from-black-rich via-black-pure to-black-soft relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
           {loading && (
             <div className="text-center py-20">
@@ -370,7 +396,7 @@ export default function MarketplacePage() {
                       <div className="relative h-72 md:h-96 md:w-2/5 overflow-hidden">
                       <img
                         src={car.primaryImage || car.gallery[0] || '/placeholder-car.jpg'}
-                        alt={car.name}
+                        alt=""
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
@@ -482,12 +508,16 @@ export default function MarketplacePage() {
                             <Heart className="w-4 h-4 mr-2 group-hover/btn:fill-current transition-all" />
                             Save
                           </Button>
-                          <a href={generateWhatsAppUrl(car)} target="_blank" rel="noopener noreferrer" className="flex-1">
-                            <Button className="btn-luxury w-full group/btn">
-                              Inquire
-                              <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                            </Button>
-                          </a>
+                          <Button
+                            className="btn-luxury flex-1 group/btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openModal(car);
+                            }}
+                          >
+                            View Details
+                            <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                          </Button>
                         </div>
                       </div>
                     </div>
@@ -499,112 +529,6 @@ export default function MarketplacePage() {
         </div>
       </section>
 
-      {/* Coming Soon Section */}
-      {allCars.filter(car => car.status === 'coming_soon').length > 0 && (
-        <section className="py-32 px-4 bg-gradient-to-br from-black-soft via-black-rich to-black-pure relative overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold-medium to-transparent opacity-30" />
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold-medium/10 rounded-full blur-3xl"></div>
-          </div>
-
-          <div className="max-w-7xl mx-auto relative">
-            <div className="text-center mb-20 animate-luxury-fade-in-up">
-              <div className="inline-flex items-center gap-3 mb-6 px-6 py-2 bg-gradient-to-r from-gold-medium/10 to-gold-light/10 backdrop-blur-xl border border-gold-medium/30 rounded-full">
-                <Star className="w-4 h-4 text-gold-medium animate-pulse" />
-                <span className="text-gold-light text-sm uppercase tracking-[0.3em]">Exclusive Previews</span>
-              </div>
-              <h2 className="font-display text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-gold-light to-gold-medium mb-6">
-                Coming Soon
-              </h2>
-              <div className="flex items-center justify-center gap-4 mb-8">
-                <div className="w-20 h-px bg-gradient-to-r from-transparent to-gold-medium"></div>
-                <Diamond className="w-3 h-3 text-gold-medium rotate-45" />
-                <div className="w-20 h-px bg-gradient-to-l from-transparent to-gold-medium"></div>
-              </div>
-              <p className="text-white-soft text-lg max-w-2xl mx-auto">
-                Be the first to discover our upcoming exclusive acquisitions
-              </p>
-            </div>
-
-            <div className="flex flex-col gap-12">
-              {allCars.filter(car => car.status === 'coming_soon').map((car, index) => (
-                <div
-                  key={car.id}
-                  className="group relative animate-exclusive-entrance"
-                  style={{ animationDelay: `${index * 0.2}s` }}
-                >
-                  <div className="relative bg-gradient-to-br from-black-rich to-black-soft border border-gold-medium/20 rounded-lg overflow-hidden hover:border-gold-medium/60 hover:shadow-2xl hover:shadow-gold-medium/20 transition-all duration-500">
-
-                    {/* Horizontal Layout Container */}
-                    <div className="flex flex-col md:flex-row h-full">
-                      <div className="relative h-80 md:h-96 md:w-2/5 overflow-hidden">
-                      <img
-                        src={car.primaryImage || car.gallery[0] || '/placeholder-car.jpg'}
-                        alt={car.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = '/placeholder-car.jpg';
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black-rich via-black/50 to-transparent"></div>
-
-                      <div className="absolute top-6 left-6">
-                        <span className="px-6 py-3 rounded-full text-sm font-bold uppercase tracking-wider bg-blue-500/20 text-blue-400 border border-blue-500/50 backdrop-blur-md">
-                          Coming Soon
-                        </span>
-                      </div>
-
-                      <div className="absolute top-6 right-6">
-                        <div className="flex items-center gap-2 px-4 py-2 bg-gold-medium/90 backdrop-blur-md rounded-full">
-                          <Calendar className="w-4 h-4 text-black" />
-                          <span className="text-black text-sm font-bold">{car.year}</span>
-                        </div>
-                      </div>
-
-                      <div className="p-8 space-y-6 md:w-3/5 flex flex-col justify-between">
-                        <div className="flex items-start justify-between">
-                          <h3 className="font-display text-3xl text-gold-medium group-hover:text-gold-light transition-colors">
-                            {car.name}
-                          </h3>
-                          <span className="text-gold-light text-lg font-body">{car.year}</span>
-                        </div>
-
-                        <p className="text-white-soft leading-relaxed">
-                          {car.description || `Experience the ultimate in luxury and performance with this exceptional ${car.make} ${car.model}.`}
-                        </p>
-
-                        <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-black-rich/50 p-4 rounded border border-gold-medium/10">
-                          <span className="text-caption text-gold-medium block mb-2">Engine</span>
-                          <span className="text-white-soft font-semibold">{car.engine || 'TBA'}</span>
-                        </div>
-                          <div className="bg-black-rich/50 p-4 rounded border border-gold-medium/10">
-                            <span className="text-caption text-gold-medium block mb-2">Power</span>
-                            <span className="text-white-soft font-semibold">{car.horsepower || 'TBA'}</span>
-                          </div>
-                        </div>
-
-                        <div className="divider-gold"></div>
-
-                        <div className="flex gap-4">
-                          <Button className="btn-luxury flex-1 group/btn">
-                            <Calendar className="w-5 h-5 mr-2" />
-                            Reserve Now
-                          </Button>
-                          <Button className="btn-luxury-outline flex-1 group/btn">
-                            <Heart className="w-5 h-5 mr-2 group-hover/btn:fill-current transition-all" />
-                            Wishlist
-                          </Button>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Enhanced Modal */}
       {selectedCar && isModalOpen && (
@@ -688,13 +612,9 @@ export default function MarketplacePage() {
                     </div>
                   </div>
                   <div className="text-right">
-                    {selectedCar.show_price ? (
+                    {selectedCar.show_price && (
                       <div className="text-5xl font-display">
                         {formatPrice(selectedCar.price, selectedCar.price_currency || 'USD')}
-                      </div>
-                    ) : (
-                      <div className="text-4xl font-display text-gold-medium">
-                        Contact for Price
                       </div>
                     )}
                   </div>
@@ -765,7 +685,7 @@ export default function MarketplacePage() {
                     <a href={`/virtual-tour?carId=${selectedCar.id}`} className="block">
                       <button className="w-full bg-white hover:bg-gray-100 text-black px-8 py-5 font-bold text-lg uppercase tracking-wider hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 rounded-lg group shadow-lg">
                         <Play className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                        Virtual Tour
+                        Gallery
                         <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                       </button>
                     </a>

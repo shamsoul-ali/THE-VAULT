@@ -31,6 +31,7 @@ interface CarFormData {
   year: number
   price: number
   price_currency: string
+  show_price: boolean
   status: string
   category: string
   location: string
@@ -89,6 +90,7 @@ export default function EditCarPage() {
     year: new Date().getFullYear(),
     price: 0,
     price_currency: 'USD',
+    show_price: false,
     status: 'available',
     category: 'luxury',
     location: '',
@@ -162,6 +164,7 @@ export default function EditCarPage() {
         year: data.year || new Date().getFullYear(),
         price: data.price || 0,
         price_currency: data.price_currency || 'USD',
+        show_price: data.show_price || false,
         status: data.status || 'available',
         category: data.category || 'luxury',
         location: data.location || '',
@@ -426,7 +429,7 @@ export default function EditCarPage() {
 
             <div>
               <Label htmlFor="year" className="text-white font-medium">
-                Year *
+                Year Manufactured *
               </Label>
               <Input
                 id="year"
@@ -453,6 +456,29 @@ export default function EditCarPage() {
                 className="bg-white/10 border-white/20 text-white mt-2"
                 required
               />
+              {formData.price > 0 && (
+                <p className="text-gold-medium text-sm mt-2">
+                  = RM {(formData.price * 4).toLocaleString()} (USD × 4)
+                </p>
+              )}
+            </div>
+
+            <div>
+              <div className="flex items-center space-x-3 mt-2">
+                <input
+                  type="checkbox"
+                  id="show_price"
+                  checked={formData.show_price}
+                  onChange={(e) => handleInputChange('show_price', e.target.checked)}
+                  className="w-4 h-4 text-gold-medium bg-white/10 border-white/20 rounded focus:ring-gold-medium focus:ring-2"
+                />
+                <Label htmlFor="show_price" className="text-white font-medium cursor-pointer">
+                  Show price publicly
+                </Label>
+              </div>
+              <p className="text-white/60 text-xs mt-1 ml-7">
+                When unchecked, price will show as "Contact for Price"
+              </p>
             </div>
 
             <div>
@@ -494,17 +520,6 @@ export default function EditCarPage() {
               </select>
             </div>
 
-            <div>
-              <Label htmlFor="location" className="text-white font-medium">
-                Location
-              </Label>
-              <Input
-                id="location"
-                value={formData.location}
-                onChange={(e) => handleInputChange('location', e.target.value)}
-                className="bg-white/10 border-white/20 text-white mt-2"
-              />
-            </div>
 
             <div>
               <Label htmlFor="mileage" className="text-white font-medium">
@@ -743,7 +758,7 @@ export default function EditCarPage() {
           <Link href={`/admin/cars/${carId}/virtual-tour`}>
             <Button variant="outline">
               <Play className="w-4 h-4 mr-2" />
-              Virtual Tour
+              Gallery
             </Button>
           </Link>
 

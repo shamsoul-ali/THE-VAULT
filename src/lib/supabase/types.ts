@@ -20,6 +20,7 @@ export type Database = {
           year: number
           price: number
           price_currency: string | null
+          show_price: boolean | null
           status: 'available' | 'sold' | 'waiting_list' | 'coming_soon' | 'booked' | 'reserved'
           category: 'hypercar' | 'supercar' | 'luxury' | 'classic' | 'electric' | 'track' | 'sports'
           location: string | null
@@ -194,6 +195,7 @@ export type Database = {
           alt_text: string | null
           caption: string | null
           sort_order: number | null
+          gallery_selected: boolean | null
           file_size: number | null
           width: number | null
           height: number | null
@@ -210,6 +212,7 @@ export type Database = {
           alt_text?: string | null
           caption?: string | null
           sort_order?: number | null
+          gallery_selected?: boolean | null
           file_size?: number | null
           width?: number | null
           height?: number | null
@@ -226,6 +229,7 @@ export type Database = {
           alt_text?: string | null
           caption?: string | null
           sort_order?: number | null
+          gallery_selected?: boolean | null
           file_size?: number | null
           width?: number | null
           height?: number | null

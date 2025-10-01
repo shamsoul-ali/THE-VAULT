@@ -5,6 +5,7 @@ import { Button } from "./button";
 import { Menu, X, Lock, Crown, User, LogOut, Settings, Star } from "lucide-react";
 import { useAuth } from "@/lib/hooks/useAuth";
 import Link from "next/link";
+import Image from "next/image";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,11 +16,18 @@ export function Navigation() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/40 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between items-center h-16">
-          {/* Logo matching reference style */}
+          {/* Logo */}
           <div className="flex items-center">
-            <h1 className="font-light text-xl text-white">
-              REVURA
-            </h1>
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/html/Revura_Logo_White.png"
+                alt="Revura Logo"
+                width={120}
+                height={40}
+                className="h-8 w-auto"
+                priority
+              />
+            </Link>
           </div>
 
           {/* Navigation matching reference */}
@@ -100,9 +108,6 @@ export function Navigation() {
                 </div>
               ) : (
                 <div className="flex items-center space-x-3">
-                  <Link href="/login" className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium rounded-full backdrop-blur transition-all duration-200">
-                    Sign In
-                  </Link>
                   <Link href="/signup" className="px-6 py-2 bg-white text-black hover:bg-white/90 text-sm font-medium rounded-full transition-all duration-200">
                     Join Us
                   </Link>
@@ -189,13 +194,6 @@ export function Navigation() {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  <Link
-                    href="/login"
-                    className="block px-6 py-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium rounded-full backdrop-blur transition-all duration-200 text-center"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Sign In
-                  </Link>
                   <Link
                     href="/signup"
                     className="block px-6 py-2 bg-white text-black hover:bg-white/90 text-sm font-medium rounded-full transition-all duration-200 text-center"

@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react'],
   },
   images: {
-    domains: ['localhost'],
+    domains: ['localhost', 'cntokotkelmsrqegydux.supabase.co'],
     formats: ['image/webp', 'image/avif'],
   },
   env: {
