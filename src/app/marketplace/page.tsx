@@ -420,6 +420,7 @@ export default function MarketplacePage() {
                           View Details
                         </Button>
                       </div>
+                      </div>
 
                       {/* Car Details */}
                       <div className="p-6 space-y-4 md:w-3/5 flex flex-col justify-between">
