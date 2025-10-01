@@ -3,9 +3,10 @@ import { createClient } from '@supabase/supabase-js'
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const { features } = await request.json()
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -17,12 +18,12 @@ export async function PUT(
     await supabase
       .from('car_features')
       .delete()
-      .eq('car_id', params.id)
+      .eq('car_id', id)
 
     // Then add new features if any
     if (features && features.length > 0) {
       const featureData = features.map((feature: string, index: number) => ({
-        car_id: params.id,
+        car_id: id,
         feature_name: feature.trim(),
         sort_order: index
       }))

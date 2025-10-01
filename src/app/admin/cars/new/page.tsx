@@ -31,6 +31,7 @@ interface CarFormData {
   year: number
   price: number
   price_currency: string
+  show_price: boolean
   status: string
   category: string
   location: string
@@ -96,6 +97,7 @@ export default function NewCarPage() {
     year: new Date().getFullYear(),
     price: 0,
     price_currency: 'USD',
+    show_price: false,
     status: 'available',
     category: 'luxury',
     location: '',
@@ -309,7 +311,7 @@ export default function NewCarPage() {
 
             <div>
               <Label htmlFor="year" className="text-white font-medium">
-                Year *
+                Year Manufactured *
               </Label>
               <Input
                 id="year"
@@ -337,6 +339,29 @@ export default function NewCarPage() {
                 className="bg-white/10 border-white/20 text-white mt-2"
                 required
               />
+              {formData.price > 0 && (
+                <p className="text-gold-medium text-sm mt-2">
+                  = RM {(formData.price * 4).toLocaleString()} (USD × 4)
+                </p>
+              )}
+            </div>
+
+            <div>
+              <div className="flex items-center space-x-3 mt-2">
+                <input
+                  type="checkbox"
+                  id="show_price"
+                  checked={formData.show_price}
+                  onChange={(e) => handleInputChange('show_price', e.target.checked)}
+                  className="w-4 h-4 text-gold-medium bg-white/10 border-white/20 rounded focus:ring-gold-medium focus:ring-2"
+                />
+                <Label htmlFor="show_price" className="text-white font-medium cursor-pointer">
+                  Show price publicly
+                </Label>
+              </div>
+              <p className="text-white/60 text-xs mt-1 ml-7">
+                When unchecked, price will show as "Contact for Price"
+              </p>
             </div>
 
             <div>
@@ -378,18 +403,6 @@ export default function NewCarPage() {
               </select>
             </div>
 
-            <div>
-              <Label htmlFor="location" className="text-white font-medium">
-                Location
-              </Label>
-              <Input
-                id="location"
-                value={formData.location}
-                onChange={(e) => handleInputChange('location', e.target.value)}
-                placeholder="e.g., Monaco"
-                className="bg-white/10 border-white/20 text-white mt-2"
-              />
-            </div>
 
             <div>
               <Label htmlFor="mileage" className="text-white font-medium">

@@ -2,107 +2,28 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play, Shield, Users, Car, Crown, Lock, Star, Eye, Diamond } from "lucide-react";
-import { useEffect } from "react";
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function HomePage() {
-  useEffect(() => {
-    // Ensure video plays and handle loading states
-    const video = document.querySelector('.hero-video-background') as HTMLVideoElement;
-    
-    if (video) {
-      // Video event handlers
-      const handleCanPlay = () => {
-        console.log('Video can play');
-        // Video should be visible from start
-      };
-      
-      const handleLoadStart = () => {
-        console.log('Video load started');
-      };
-      
-      const handleError = (e: any) => {
-        console.error('Video failed to load:', e);
-      };
-      
-      // Add event listeners
-      video.addEventListener('canplay', handleCanPlay);
-      video.addEventListener('loadstart', handleLoadStart);
-      video.addEventListener('error', handleError);
-      
-      // Force play the video with multiple attempts
-      const playVideo = async () => {
-        try {
-          video.currentTime = 0;
-          await video.play();
-          console.log('Video started playing successfully');
-        } catch (error) {
-          console.log('Video autoplay failed:', error);
-        }
-      };
-      
-      // Multiple play attempts
-      playVideo();
-      setTimeout(playVideo, 100);
-      setTimeout(playVideo, 500);
-      setTimeout(playVideo, 1000);
-      
-      // Ensure video is visible
-      video.style.display = 'block';
-      video.style.visibility = 'visible';
-      
-      // Cleanup
-      return () => {
-        video.removeEventListener('canplay', handleCanPlay);
-        video.removeEventListener('loadstart', handleLoadStart);
-        video.removeEventListener('error', handleError);
-      };
-    }
-  }, []);
-
   return (
     <div className="min-h-screen">
-      {/* Modern Hero Section with Video Background */}
+      {/* Modern Hero Section with Image Background */}
       <section className="relative min-h-screen flex items-center justify-start overflow-hidden">
-        {/* Fallback Background - Temporarily disabled */}
-        {/* <div 
-          className="absolute inset-0 bg-gradient-to-br from-black via-neutral-950 to-neutral-900 transition-opacity duration-1000" 
-          style={{ zIndex: -3, opacity: 0.05 }}
-        ></div> */}
-        
-        {/* Cinematic Video Background */}
-        <video
-          className="hero-video-background"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          controls={false}
-          disablePictureInPicture
-          style={{ zIndex: -2 }}
-          onLoadStart={() => console.log('Video element loadstart')}
-          onCanPlay={(e) => {
-            console.log('Video element canplay');
-            const video = e.currentTarget;
-            video.play().catch(err => console.log('Canplay autoplay attempt failed:', err));
-          }}
-          onError={(e) => console.error('Video element error:', e)}
-          onLoadedData={(e) => {
-            console.log('Video data loaded');
-            const video = e.currentTarget;
-            video.play().catch(err => console.log('LoadedData autoplay attempt failed:', err));
-          }}
-          onLoadedMetadata={(e) => {
-            console.log('Video metadata loaded');
-            const video = e.currentTarget;
-            video.play().catch(err => console.log('LoadedMetadata autoplay attempt failed:', err));
-          }}
-        >
-          <source src="/html/The new Porsche 911 Exterior  Interior Design.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        
-        {/* Video Overlay for text readability */}
+
+        {/* Full Viewport Image Background */}
+        <div className="absolute inset-0" style={{ zIndex: -2 }}>
+          <Image
+            src="/html/PDP04506.JPG"
+            alt="Luxury Car Hero"
+            fill
+            priority
+            className="object-cover"
+            quality={100}
+          />
+        </div>
+
+        {/* Image Overlay for text readability */}
         <div className="hero-video-overlay" style={{ zIndex: -1 }}></div>
         
         {/* Main Content - Left Aligned */}
@@ -111,15 +32,15 @@ export default function HomePage() {
             
             {/* Hero Title - Left Aligned */}
             <div className="space-y-6">
-              <h1 className="text-hero">
+              <h1 className="text-hero text-2xl md:text-3xl lg:text-4xl font-bold">
                 Where Performance<br/>
-                Meets Presents
+                Meets Presence
               </h1>
             </div>
-            
+
             {/* Subtitle - Left Aligned */}
             <div className="space-y-6">
-              <h2 className="text-muted text-sm tracking-widest">
+              <h2 className="text-black text-xs md:text-sm tracking-widest font-light">
                 LEGENDS MEET LEGACY
               </h2>
             </div>
@@ -130,7 +51,6 @@ export default function HomePage() {
         {/* Luxury Scroll Indicator */}
         <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 animate-luxury-pulse">
           <div className="flex flex-col items-center space-y-3">
-            <div className="text-caption text-gold-medium/70">EXPLORE</div>
             <div className="w-px h-12 bg-gradient-to-b from-gold-medium/60 to-transparent"></div>
             <div className="w-2 h-2 bg-gold-medium rounded-full animate-bounce"></div>
           </div>
@@ -264,6 +184,18 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* View Marketplace Button Section */}
+      <section className="py-16 px-4 bg-gradient-to-br from-black-rich to-black-soft relative">
+        <div className="max-w-7xl mx-auto text-center">
+          <Link href="/marketplace">
+            <Button className="btn-luxury text-lg px-12 py-6 group animate-premium-glow">
+              <Eye className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
+              View Marketplace
+              <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-2 transition-transform" />
+            </Button>
+          </Link>
+        </div>
+      </section>
 
     </div>
   );
