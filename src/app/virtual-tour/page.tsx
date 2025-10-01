@@ -153,22 +153,22 @@ function VirtualTourContent() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
+    <div className="min-h-screen bg-black text-white p-3 md:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
           <Link href="/marketplace">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="w-4 h-4 mr-2" />
+            <Button variant="ghost" size="sm" className="text-xs md:text-sm">
+              <ArrowLeft className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
               Back to Marketplace
             </Button>
           </Link>
         </div>
 
         {carImages.length > 0 ? (
-          <div className="space-y-8">
+          <div className="space-y-6 md:space-y-8">
             {/* Header */}
-            <div className="text-center space-y-4">
-              <h1 className="text-4xl font-bold text-gold-medium">
+            <div className="text-center space-y-3 md:space-y-4">
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gold-medium">
                 {carInfo?.name || 'Gallery'}
               </h1>
             </div>
@@ -186,8 +186,8 @@ function VirtualTourContent() {
                   priority
                 />
                 <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors duration-300" />
-                <div className="absolute bottom-4 right-4">
-                  <span className="px-3 py-1 bg-black/60 backdrop-blur-sm text-sm text-white rounded-full">
+                <div className="absolute bottom-2 md:bottom-4 right-2 md:right-4">
+                  <span className="px-2 md:px-3 py-1 bg-black/60 backdrop-blur-sm text-xs md:text-sm text-white rounded-full">
                     {currentMainImage + 1} / {carImages.length}
                   </span>
                 </div>
@@ -197,11 +197,11 @@ function VirtualTourContent() {
             {/* Thumbnail Strip */}
             {carImages.length > 1 && (
               <div className="max-w-4xl mx-auto">
-                <div className="flex gap-3 overflow-x-auto pb-2">
+                <div className="flex gap-2 md:gap-3 overflow-x-auto pb-2">
                   {carImages.map((image, index) => (
                     <div
                       key={image.id}
-                      className={`flex-shrink-0 relative aspect-square w-20 h-20 cursor-pointer overflow-hidden rounded-lg transition-all ${
+                      className={`flex-shrink-0 relative aspect-square w-16 h-16 md:w-20 md:h-20 cursor-pointer overflow-hidden rounded-lg transition-all ${
                         index === currentMainImage
                           ? 'ring-2 ring-gold-medium scale-110'
                           : 'hover:scale-105 opacity-70 hover:opacity-100'
@@ -222,35 +222,35 @@ function VirtualTourContent() {
             )}
 
             {/* Contact Section */}
-            <div className="text-center pt-12">
-              <div className="flex gap-4 justify-center">
+            <div className="text-center pt-8 md:pt-12">
+              <div className="flex flex-col md:flex-row gap-3 md:gap-4 justify-center">
                 <Link href="/marketplace">
-                  <Button variant="outline">Back to Marketplace</Button>
+                  <Button variant="outline" className="text-xs md:text-sm w-full md:w-auto">Back to Marketplace</Button>
                 </Link>
-                <a href={generateWhatsAppUrl(carInfo)} target="_blank" rel="noopener noreferrer">
-                  <Button className="btn-luxury">Contact via WhatsApp</Button>
+                <a href={generateWhatsAppUrl(carInfo)} target="_blank" rel="noopener noreferrer" className="w-full md:w-auto">
+                  <Button className="btn-luxury text-xs md:text-sm w-full md:w-auto">Contact for Price</Button>
                 </a>
               </div>
             </div>
           </div>
         ) : (
-          <div className="text-center py-20">
-            <div className="w-24 h-24 mx-auto mb-6 bg-white/10 rounded-full flex items-center justify-center">
-              <Grid className="w-12 h-12 text-white/50" />
+          <div className="text-center py-12 md:py-20">
+            <div className="w-16 h-16 md:w-24 md:h-24 mx-auto mb-4 md:mb-6 bg-white/10 rounded-full flex items-center justify-center">
+              <Grid className="w-8 h-8 md:w-12 md:h-12 text-white/50" />
             </div>
-            <h1 className="text-4xl font-bold mb-4">Gallery Coming Soon</h1>
-            <p className="text-white/70 mb-8">
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4">Gallery Coming Soon</h1>
+            <p className="text-white/70 mb-6 md:mb-8 text-sm md:text-base">
               The image gallery for this vehicle is not yet available.
             </p>
-            <p className="text-white/50 text-sm mb-8">
+            <p className="text-white/50 text-xs md:text-sm mb-6 md:mb-8">
               Contact us via WhatsApp for more information about this vehicle.
             </p>
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-col md:flex-row gap-3 md:gap-4 justify-center">
               <Link href="/marketplace">
-                <Button variant="outline">Back to Marketplace</Button>
+                <Button variant="outline" className="text-xs md:text-sm w-full md:w-auto">Back to Marketplace</Button>
               </Link>
-              <a href={generateWhatsAppUrl(carInfo)} target="_blank" rel="noopener noreferrer">
-                <Button className="btn-luxury">Contact via WhatsApp</Button>
+              <a href={generateWhatsAppUrl(carInfo)} target="_blank" rel="noopener noreferrer" className="w-full md:w-auto">
+                <Button className="btn-luxury text-xs md:text-sm w-full md:w-auto">Contact for Price</Button>
               </a>
             </div>
           </div>
@@ -258,26 +258,26 @@ function VirtualTourContent() {
 
         {/* Image Modal */}
         {selectedImageIndex !== null && (
-          <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-2 md:p-4">
             <button
               onClick={closeImageModal}
-              className="absolute top-4 right-4 text-white hover:text-gold-medium transition-colors z-10"
+              className="absolute top-2 md:top-4 right-2 md:right-4 text-white hover:text-gold-medium transition-colors z-10"
             >
-              <X className="w-8 h-8" />
+              <X className="w-6 h-6 md:w-8 md:h-8" />
             </button>
 
             <button
               onClick={() => navigateImage('prev')}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-gold-medium transition-colors z-10"
+              className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 text-white hover:text-gold-medium transition-colors z-10"
             >
-              <ChevronLeft className="w-8 h-8" />
+              <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
             </button>
 
             <button
               onClick={() => navigateImage('next')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gold-medium transition-colors z-10"
+              className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white hover:text-gold-medium transition-colors z-10"
             >
-              <ChevronRight className="w-8 h-8" />
+              <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
             </button>
 
             <div className="relative max-w-4xl max-h-[80vh] w-full h-full">
@@ -290,12 +290,12 @@ function VirtualTourContent() {
               />
             </div>
 
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center">
-              <p className="text-white/70 text-sm">
+            <div className="absolute bottom-2 md:bottom-4 left-1/2 -translate-x-1/2 text-center">
+              <p className="text-white/70 text-xs md:text-sm">
                 {selectedImageIndex + 1} of {carImages.length}
               </p>
               {carImages[selectedImageIndex].caption && (
-                <p className="text-white text-sm mt-2">
+                <p className="text-white text-xs md:text-sm mt-1 md:mt-2">
                   {carImages[selectedImageIndex].caption}
                 </p>
               )}

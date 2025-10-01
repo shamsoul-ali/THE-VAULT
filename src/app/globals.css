@@ -800,7 +800,7 @@
   font-weight: 400;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-size: 0.875rem;
+  font-size: 0.656rem;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
@@ -832,7 +832,7 @@
   padding: 1rem 1.5rem 1rem 3rem;
   background: rgba(18, 18, 20, 0.9);
   border: 2px solid var(--gold-medium);
-  border-radius: 0;
+  border-radius: 9999px;
   color: var(--white-pure);
   font-family: var(--font-inter), sans-serif;
   font-size: 0.875rem;

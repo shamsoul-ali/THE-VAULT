@@ -28,9 +28,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-x-hidden">
       <body
-        className={`${playfairDisplay.variable} ${inter.variable} antialiased bg-background text-foreground`}
+        className={`${playfairDisplay.variable} ${inter.variable} antialiased bg-background text-foreground overflow-x-hidden`}
       >
         <AuthProvider>
           <Navigation />
